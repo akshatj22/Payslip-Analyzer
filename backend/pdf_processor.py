@@ -31,7 +31,7 @@ class PDFProcessor:
         )
 
         self.groq_api_key = os.getenv("GROQ_API_KEY")
-        self.llm_model = "mixtral-8x7b-32768" 
+        self.llm_model = "mistral-saba-24b" 
         
         self._setup_chroma()
         

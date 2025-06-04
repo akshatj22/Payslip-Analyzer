@@ -11,9 +11,9 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app, resources={
-    r"/upload": {"origins": "http://localhost:5173"},
+    r"/upload": {"origins": "https://payslip-analyzer-sn9l-sigma.vercel.app/"},
     r"/ask": {
-        "origins": "http://localhost:5173",
+        "origins": "https://payslip-analyzer-sn9l-sigma.vercel.app/",
         "methods": ["POST", "OPTIONS"],  # Explicitly allow OPTIONS
         "allow_headers": ["Content-Type"]
     }
