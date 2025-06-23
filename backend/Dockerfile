@@ -1,39 +1,18 @@
-# Stage 1: Build stage with Alpine base
-FROM python:3.11-alpine AS builder
-
-# Install build dependencies (adjust as needed)
-RUN apk add --no-cache --virtual .build-deps \
-    gcc \
-    musl-dev \
-    libffi-dev \
-    openssl-dev
-
-# Create and activate virtual environment
-RUN python -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-
-# Install dependencies
+# Build stage (for installing dependencies)
+FROM python:3.11-slim AS build
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Remove build dependencies
-RUN apk del .build-deps
-
-# Stage 2: Final runtime image
-FROM python:3.11-alpine
+# Runtime stage (for running the app)
+FROM python:3.11-slim
 WORKDIR /app
 
-# Copy virtual environment
-COPY --from=builder /opt/venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
+# Copy installed Python packages from build stage
+COPY --from=build /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 
-# Copy application code
+# Copy your application code
 COPY . .
 
-# Cleanup unnecessary files
-RUN find /opt/venv -type d -name '__pycache__' -exec rm -rf {} + \
-    && find /opt/venv -name '*.pyc' -delete
-
-# Set entrypoint (change 'app.py' if your main file is named differently)
+# If your main Flask file is called app.py, use this CMD
 CMD ["python", "app.py"]
