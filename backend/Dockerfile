@@ -1,21 +1,21 @@
 # Stage 1: Build stage with Alpine base
 FROM python:3.11-alpine AS builder
 
-# Install build dependencies
+# Install build dependencies (adjust as needed)
 RUN apk add --no-cache --virtual .build-deps \
     gcc \
     musl-dev \
     libffi-dev \
     openssl-dev
 
-# Create virtual environment
+# Create and activate virtual environment
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Install dependencies
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir --prefix=/opt/venv -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Remove build dependencies
 RUN apk del .build-deps
@@ -35,5 +35,5 @@ COPY . .
 RUN find /opt/venv -type d -name '__pycache__' -exec rm -rf {} + \
     && find /opt/venv -name '*.pyc' -delete
 
-# Set entrypoint
+# Set entrypoint (change 'app.py' if your main file is named differently)
 CMD ["python", "app.py"]
