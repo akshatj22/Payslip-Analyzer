@@ -6,3 +6,4 @@ sentence-transformers
 langchain-groq
 langchain-community
 langgraph
+gunicorn

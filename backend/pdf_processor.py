@@ -16,7 +16,7 @@ import re
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
+  
 class PDFProcessor:
     def __init__(self):
         self.text_splitter = RecursiveCharacterTextSplitter(
